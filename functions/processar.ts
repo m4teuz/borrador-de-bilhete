@@ -1,12 +1,10 @@
 import * as photon from "@silvia-odwyer/photon";
 
-// Mudança aqui: Importamos o binário diretamente
 // @ts-ignore
-import wasmModule from "../node_modules/@silvia-odwyer/photon/photon_wasm_bg.wasm";
+import wasmModule from "./photon_wasm_bg.wasm";
 
 export const onRequestPost: PagesFunction = async (context) => {
   try {
-    // Inicializa o motor usando o módulo importado
     await photon.init(wasmModule);
 
     const formData = await context.request.formData();
@@ -17,7 +15,7 @@ export const onRequestPost: PagesFunction = async (context) => {
     const bytes = new Uint8Array(await file.arrayBuffer());
     const inputImg = photon.PhotonImage.new_from_bytes(bytes);
     
-    // Aplica o blur (intensidade 15)
+    // Aplica o blur pesado
     photon.gaussian_blur(inputImg, 15); 
 
     const outputBytes = inputImg.get_bytes();
